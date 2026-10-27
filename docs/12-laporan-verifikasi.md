@@ -1,6 +1,6 @@
 # Laporan verifikasi nyata
 
-Pemeriksaan dilakukan pada **28 Oktober 2026, Asia/Jakarta**, di macOS Apple Silicon. Hasil berikut berasal dari perintah yang benar-benar dijalankan pada source ini. Konfigurasi CI tersedia tetapi belum dieksekusi di GitHub karena repository belum dipublikasikan.
+Pemeriksaan dilakukan pada **28 Oktober 2026, Asia/Jakarta**, di macOS Apple Silicon. Hasil berikut berasal dari perintah yang benar-benar dijalankan pada source ini. Setelah publikasi, CI juga dijalankan di GitHub; status setiap revisi tersedia pada [GitHub Actions](https://github.com/Samsul-Arip/doc/actions). Tabel berikut mencatat hasil pengujian lokal.
 
 | Bagian                 | Pemeriksaan                                                                              | Hasil                                                                                                                                                            |
 | ---------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -33,7 +33,7 @@ Peringatan analyzer Flutter dan hit test tombol pada widget test diperbaiki, bod
 ## Batas verifikasi
 
 - Docker/Compose tidak dijalankan karena CLI/engine tidak tersedia; YAML yang valid bukan bukti container image berhasil dibangun. Jalur native Node + MySQL benar-benar diuji.
-- GitHub CLI dan koneksi GitHub yang dapat menulis repository tidak tersedia. Tidak ada repository public, URL Pages, atau run CI cloud yang diklaim berhasil. Workflow Pages dan instruksi publikasi manual tersedia di [panduan GitHub](09-git-github-guide.md).
+- Repository telah dipublikasikan ke [Samsul-Arip/doc](https://github.com/Samsul-Arip/doc), branch `main`. Workflow CI dan Pages berjalan di GitHub Actions. Petunjuk pengelolaan tetap tersedia di [panduan GitHub](09-git-github-guide.md).
 - Instalasi dari perangkat Windows11/Ubuntu baru serta perangkat Android fisik tidak diuji langsung. Dokumentasinya merujuk sumber resmi. Target iOS belum ditambahkan dan Xcode lokal belum lengkap.
 - Build release, signing distribusi, dan API produksi belum diuji. Scope proyek adalah latihan lokal; API belum memiliki login/otorisasi.
 - `npm audit` adalah snapshot waktu pemeriksaan, bukan jaminan keamanan masa depan. Jalankan ulang saat memperbarui dependency.
