@@ -33,7 +33,7 @@ Peringatan analyzer Flutter dan hit test tombol pada widget test diperbaiki, bod
 ## Batas verifikasi
 
 - Docker/Compose tidak dijalankan karena CLI/engine tidak tersedia; YAML yang valid bukan bukti container image berhasil dibangun. Jalur native Node + MySQL benar-benar diuji.
-- Repository telah dipublikasikan ke [Samsul-Arip/doc](https://github.com/Samsul-Arip/doc), branch `main`. Workflow CI dan Pages berjalan di GitHub Actions. Petunjuk pengelolaan tetap tersedia di [panduan GitHub](09-git-github-guide.md).
+- Repository telah dipublikasikan ke [Samsul-Arip/doc](https://github.com/Samsul-Arip/doc), branch `main`. [Simulator Pages](https://samsul-arip.github.io/doc/) berhasil dipublikasikan; workflow deployment berstatus success dan halaman mengembalikan HTTP200. Workflow CI berjalan di GitHub Actions. Petunjuk pengelolaan tetap tersedia di [panduan GitHub](09-git-github-guide.md).
 - Instalasi dari perangkat Windows11/Ubuntu baru serta perangkat Android fisik tidak diuji langsung. Dokumentasinya merujuk sumber resmi. Target iOS belum ditambahkan dan Xcode lokal belum lengkap.
 - Build release, signing distribusi, dan API produksi belum diuji. Scope proyek adalah latihan lokal; API belum memiliki login/otorisasi.
 - `npm audit` adalah snapshot waktu pemeriksaan, bukan jaminan keamanan masa depan. Jalankan ulang saat memperbarui dependency.

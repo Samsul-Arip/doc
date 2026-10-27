@@ -4,6 +4,8 @@ Repository belajar mandiri **Kotlin Logic, MySQL, dan Flutter CRUD** dalam Bahas
 
 ![Pratinjau simulator Logic Lab](docs/assets/simulator.png)
 
+Simulator publik: **[Buka Logic Lab](https://samsul-arip.github.io/doc/)** — dapat diakses tanpa login.
+
 ## Mulai dari sini
 
 - Belum memasang tools? Ikuti [instalasi Windows11, macOS Apple Silicon, Ubuntu](docs/01-install-tools.md), [Android Studio](docs/02-setup-android-studio.md), dan [Flutter](docs/03-setup-flutter.md).
