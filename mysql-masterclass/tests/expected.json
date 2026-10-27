@@ -1,0 +1,804 @@
+[
+  {
+    "id": 1,
+    "sql": "SELECT id, name, price FROM products ORDER BY id;",
+    "expected": [
+      {
+        "id": 1,
+        "name": "Laptop",
+        "price": 12000000
+      },
+      {
+        "id": 2,
+        "name": "Monitor",
+        "price": 2500000
+      },
+      {
+        "id": 3,
+        "name": "Keyboard",
+        "price": 350000
+      },
+      {
+        "id": 4,
+        "name": "Mouse",
+        "price": 150000
+      },
+      {
+        "id": 5,
+        "name": "Buku",
+        "price": 25000
+      },
+      {
+        "id": 6,
+        "name": "Pulpen",
+        "price": 5000
+      },
+      {
+        "id": 7,
+        "name": "Headset",
+        "price": 500000
+      },
+      {
+        "id": 8,
+        "name": "Webcam",
+        "price": 700000
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "sql": "SELECT id, name FROM products WHERE stock = 0 ORDER BY id;",
+    "expected": [
+      {
+        "id": 4,
+        "name": "Mouse"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "sql": "SELECT name, price FROM products ORDER BY price DESC, id LIMIT 3;",
+    "expected": [
+      {
+        "name": "Laptop",
+        "price": 12000000
+      },
+      {
+        "name": "Monitor",
+        "price": 2500000
+      },
+      {
+        "name": "Webcam",
+        "price": 700000
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "sql": "SELECT DISTINCT city FROM customers ORDER BY city;",
+    "expected": [
+      {
+        "city": "Bandung"
+      },
+      {
+        "city": "Bogor"
+      },
+      {
+        "city": "Jakarta"
+      },
+      {
+        "city": "Surabaya"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "sql": "SELECT id, name FROM products WHERE name LIKE '%o%' ORDER BY id;",
+    "expected": [
+      {
+        "id": 1,
+        "name": "Laptop"
+      },
+      {
+        "id": 2,
+        "name": "Monitor"
+      },
+      {
+        "id": 3,
+        "name": "Keyboard"
+      },
+      {
+        "id": 4,
+        "name": "Mouse"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "sql": "SELECT id, name FROM products WHERE category_id IN (1,3) ORDER BY id;",
+    "expected": [
+      {
+        "id": 1,
+        "name": "Laptop"
+      },
+      {
+        "id": 2,
+        "name": "Monitor"
+      },
+      {
+        "id": 5,
+        "name": "Buku"
+      },
+      {
+        "id": 6,
+        "name": "Pulpen"
+      },
+      {
+        "id": 8,
+        "name": "Webcam"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "sql": "SELECT name, price FROM products WHERE price BETWEEN 25000 AND 500000 ORDER BY id;",
+    "expected": [
+      {
+        "name": "Keyboard",
+        "price": 350000
+      },
+      {
+        "name": "Mouse",
+        "price": 150000
+      },
+      {
+        "name": "Buku",
+        "price": 25000
+      },
+      {
+        "name": "Headset",
+        "price": 500000
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "sql": "SELECT id, name FROM customers WHERE phone IS NULL ORDER BY id;",
+    "expected": [
+      {
+        "id": 2,
+        "name": "Bella"
+      },
+      {
+        "id": 5,
+        "name": "Eko"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "sql": "SELECT COUNT(*) AS product_count, SUM(stock) AS total_stock FROM products;",
+    "expected": [
+      {
+        "product_count": 8,
+        "total_stock": 193
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "sql": "SELECT id, name FROM products WHERE stock > 0 AND price < 500000 ORDER BY id;",
+    "expected": [
+      {
+        "id": 3,
+        "name": "Keyboard"
+      },
+      {
+        "id": 5,
+        "name": "Buku"
+      },
+      {
+        "id": 6,
+        "name": "Pulpen"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "sql": "SELECT p.id, p.name, c.name AS category FROM products p INNER JOIN categories c ON c.id = p.category_id ORDER BY p.id;",
+    "expected": [
+      {
+        "id": 1,
+        "name": "Laptop",
+        "category": "Elektronik"
+      },
+      {
+        "id": 2,
+        "name": "Monitor",
+        "category": "Elektronik"
+      },
+      {
+        "id": 3,
+        "name": "Keyboard",
+        "category": "Aksesori"
+      },
+      {
+        "id": 4,
+        "name": "Mouse",
+        "category": "Aksesori"
+      },
+      {
+        "id": 5,
+        "name": "Buku",
+        "category": "ATK"
+      },
+      {
+        "id": 6,
+        "name": "Pulpen",
+        "category": "ATK"
+      },
+      {
+        "id": 7,
+        "name": "Headset",
+        "category": "Aksesori"
+      },
+      {
+        "id": 8,
+        "name": "Webcam",
+        "category": "Elektronik"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "sql": "SELECT c.id, c.name, COUNT(p.id) AS product_count FROM categories c LEFT JOIN products p ON p.category_id = c.id GROUP BY c.id, c.name ORDER BY c.id;",
+    "expected": [
+      {
+        "id": 1,
+        "name": "Elektronik",
+        "product_count": 3
+      },
+      {
+        "id": 2,
+        "name": "Aksesori",
+        "product_count": 3
+      },
+      {
+        "id": 3,
+        "name": "ATK",
+        "product_count": 2
+      },
+      {
+        "id": 4,
+        "name": "Furniture",
+        "product_count": 0
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "sql": "SELECT d.name AS department, e.name AS employee FROM employees e RIGHT JOIN departments d ON d.id = e.department_id ORDER BY d.id, e.id;",
+    "expected": [
+      {
+        "department": "Engineering",
+        "employee": "Ayu"
+      },
+      {
+        "department": "Engineering",
+        "employee": "Bima"
+      },
+      {
+        "department": "Engineering",
+        "employee": "Fajar"
+      },
+      {
+        "department": "Sales",
+        "employee": "Citra"
+      },
+      {
+        "department": "Sales",
+        "employee": "Dedi"
+      },
+      {
+        "department": "HR",
+        "employee": "Eka"
+      },
+      {
+        "department": "Support",
+        "employee": null
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "sql": "SELECT e.name AS employee, m.name AS manager FROM employees e LEFT JOIN employees m ON m.id = e.manager_id ORDER BY e.id;",
+    "expected": [
+      {
+        "employee": "Ayu",
+        "manager": null
+      },
+      {
+        "employee": "Bima",
+        "manager": "Ayu"
+      },
+      {
+        "employee": "Citra",
+        "manager": null
+      },
+      {
+        "employee": "Dedi",
+        "manager": "Citra"
+      },
+      {
+        "employee": "Eka",
+        "manager": null
+      },
+      {
+        "employee": "Fajar",
+        "manager": "Ayu"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "sql": "SELECT city FROM customers WHERE city IN ('Jakarta','Bandung') UNION SELECT city FROM customers WHERE city IN ('Jakarta','Bogor') ORDER BY city;",
+    "expected": [
+      {
+        "city": "Bandung"
+      },
+      {
+        "city": "Bogor"
+      },
+      {
+        "city": "Jakarta"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "sql": "SELECT city FROM customers WHERE city IN ('Jakarta','Bandung') UNION ALL SELECT city FROM customers WHERE city IN ('Jakarta','Bogor') ORDER BY city;",
+    "expected": [
+      {
+        "city": "Bandung"
+      },
+      {
+        "city": "Bogor"
+      },
+      {
+        "city": "Jakarta"
+      },
+      {
+        "city": "Jakarta"
+      },
+      {
+        "city": "Jakarta"
+      },
+      {
+        "city": "Jakarta"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "sql": "SELECT department_id, COUNT(*) AS employee_count, ROUND(AVG(salary),2) AS average_salary, MIN(salary) AS minimum_salary, MAX(salary) AS maximum_salary FROM employees GROUP BY department_id ORDER BY department_id;",
+    "expected": [
+      {
+        "department_id": 1,
+        "employee_count": 3,
+        "average_salary": 10666666.67,
+        "minimum_salary": 10000000,
+        "maximum_salary": 12000000
+      },
+      {
+        "department_id": 2,
+        "employee_count": 2,
+        "average_salary": 9000000.0,
+        "minimum_salary": 9000000,
+        "maximum_salary": 9000000
+      },
+      {
+        "department_id": 3,
+        "employee_count": 1,
+        "average_salary": 8000000.0,
+        "minimum_salary": 8000000,
+        "maximum_salary": 8000000
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "sql": "SELECT category_id, COUNT(*) AS product_count FROM products GROUP BY category_id HAVING COUNT(*) >= 3 ORDER BY category_id;",
+    "expected": [
+      {
+        "category_id": 1,
+        "product_count": 3
+      },
+      {
+        "category_id": 2,
+        "product_count": 3
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "sql": "SELECT name, salary FROM employees WHERE salary > (SELECT AVG(salary) FROM employees) ORDER BY id;",
+    "expected": [
+      {
+        "name": "Ayu",
+        "salary": 12000000
+      },
+      {
+        "name": "Bima",
+        "salary": 10000000
+      },
+      {
+        "name": "Fajar",
+        "salary": 10000000
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "sql": "SELECT id, name, CASE WHEN stock = 0 THEN 'Habis' WHEN stock <= 7 THEN 'Rendah' ELSE 'Cukup' END AS stock_label FROM products ORDER BY id;",
+    "expected": [
+      {
+        "id": 1,
+        "name": "Laptop",
+        "stock_label": "Rendah"
+      },
+      {
+        "id": 2,
+        "name": "Monitor",
+        "stock_label": "Cukup"
+      },
+      {
+        "id": 3,
+        "name": "Keyboard",
+        "stock_label": "Cukup"
+      },
+      {
+        "id": 4,
+        "name": "Mouse",
+        "stock_label": "Habis"
+      },
+      {
+        "id": 5,
+        "name": "Buku",
+        "stock_label": "Cukup"
+      },
+      {
+        "id": 6,
+        "name": "Pulpen",
+        "stock_label": "Cukup"
+      },
+      {
+        "id": 7,
+        "name": "Headset",
+        "stock_label": "Rendah"
+      },
+      {
+        "id": 8,
+        "name": "Webcam",
+        "stock_label": "Rendah"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "sql": "SELECT c.id, c.name FROM customers c WHERE EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id AND o.status = 'paid') ORDER BY c.id;",
+    "expected": [
+      {
+        "id": 1,
+        "name": "Andi"
+      },
+      {
+        "id": 2,
+        "name": "Bella"
+      },
+      {
+        "id": 4,
+        "name": "Dina"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "sql": "SELECT c.id, c.name FROM customers c WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.id) ORDER BY c.id;",
+    "expected": [
+      {
+        "id": 5,
+        "name": "Eko"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "sql": "SELECT o.id AS order_id, SUM(i.quantity * i.unit_price) AS total FROM orders o JOIN order_items i ON i.order_id = o.id GROUP BY o.id ORDER BY o.id;",
+    "expected": [
+      {
+        "order_id": 1,
+        "total": 12700000
+      },
+      {
+        "order_id": 2,
+        "total": 2650000
+      },
+      {
+        "order_id": 3,
+        "total": 100000
+      },
+      {
+        "order_id": 4,
+        "total": 50000
+      },
+      {
+        "order_id": 5,
+        "total": 850000
+      },
+      {
+        "order_id": 6,
+        "total": 350000
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "sql": "SELECT SUM(i.quantity * i.unit_price) AS revenue FROM orders o JOIN order_items i ON i.order_id = o.id WHERE o.status = 'paid';",
+    "expected": [
+      {
+        "revenue": 16550000
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "sql": "SELECT p.id, p.name FROM products p WHERE NOT EXISTS (SELECT 1 FROM order_items i WHERE i.product_id = p.id) ORDER BY p.id;",
+    "expected": [
+      {
+        "id": 8,
+        "name": "Webcam"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "sql": "WITH totals AS (SELECT order_id, SUM(quantity * unit_price) AS total FROM order_items GROUP BY order_id) SELECT order_id, total FROM totals WHERE total > 1000000 ORDER BY order_id;",
+    "expected": [
+      {
+        "order_id": 1,
+        "total": 12700000
+      },
+      {
+        "order_id": 2,
+        "total": 2650000
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "sql": "SELECT name, salary, ROW_NUMBER() OVER (ORDER BY salary DESC, id) AS position FROM employees ORDER BY salary DESC, id;",
+    "expected": [
+      {
+        "name": "Ayu",
+        "salary": 12000000,
+        "position": 1
+      },
+      {
+        "name": "Bima",
+        "salary": 10000000,
+        "position": 2
+      },
+      {
+        "name": "Fajar",
+        "salary": 10000000,
+        "position": 3
+      },
+      {
+        "name": "Citra",
+        "salary": 9000000,
+        "position": 4
+      },
+      {
+        "name": "Dedi",
+        "salary": 9000000,
+        "position": 5
+      },
+      {
+        "name": "Eka",
+        "salary": 8000000,
+        "position": 6
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "sql": "SELECT name, salary, RANK() OVER (ORDER BY salary DESC) AS rank_salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS dense_salary FROM employees ORDER BY salary DESC, id;",
+    "expected": [
+      {
+        "name": "Ayu",
+        "salary": 12000000,
+        "rank_salary": 1,
+        "dense_salary": 1
+      },
+      {
+        "name": "Bima",
+        "salary": 10000000,
+        "rank_salary": 2,
+        "dense_salary": 2
+      },
+      {
+        "name": "Fajar",
+        "salary": 10000000,
+        "rank_salary": 2,
+        "dense_salary": 2
+      },
+      {
+        "name": "Citra",
+        "salary": 9000000,
+        "rank_salary": 4,
+        "dense_salary": 3
+      },
+      {
+        "name": "Dedi",
+        "salary": 9000000,
+        "rank_salary": 4,
+        "dense_salary": 3
+      },
+      {
+        "name": "Eka",
+        "salary": 8000000,
+        "rank_salary": 6,
+        "dense_salary": 4
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "sql": "WITH ranked AS (SELECT id, name, department_id, salary, DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rnk FROM employees) SELECT name, department_id, salary FROM ranked WHERE rnk = 1 ORDER BY department_id, id;",
+    "expected": [
+      {
+        "name": "Ayu",
+        "department_id": 1,
+        "salary": 12000000
+      },
+      {
+        "name": "Citra",
+        "department_id": 2,
+        "salary": 9000000
+      },
+      {
+        "name": "Dedi",
+        "department_id": 2,
+        "salary": 9000000
+      },
+      {
+        "name": "Eka",
+        "department_id": 3,
+        "salary": 8000000
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "sql": "WITH totals AS (SELECT o.id, o.ordered_at, SUM(i.quantity * i.unit_price) AS total FROM orders o JOIN order_items i ON i.order_id = o.id WHERE o.status = 'paid' GROUP BY o.id, o.ordered_at) SELECT id, total, SUM(total) OVER (ORDER BY ordered_at, id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total FROM totals ORDER BY ordered_at, id;",
+    "expected": [
+      {
+        "id": 1,
+        "total": 12700000,
+        "running_total": 12700000
+      },
+      {
+        "id": 2,
+        "total": 2650000,
+        "running_total": 15350000
+      },
+      {
+        "id": 5,
+        "total": 850000,
+        "running_total": 16200000
+      },
+      {
+        "id": 6,
+        "total": 350000,
+        "running_total": 16550000
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "sql": "SELECT MAX(price) AS second_price FROM products WHERE price < (SELECT MAX(price) FROM products);",
+    "expected": [
+      {
+        "second_price": 2500000
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "sql": "SELECT c.id, c.name, COALESCE(SUM(i.quantity * i.unit_price),0) AS revenue FROM customers c LEFT JOIN orders o ON o.customer_id = c.id AND o.status = 'paid' LEFT JOIN order_items i ON i.order_id = o.id GROUP BY c.id, c.name ORDER BY c.id;",
+    "expected": [
+      {
+        "id": 1,
+        "name": "Andi",
+        "revenue": 12700000
+      },
+      {
+        "id": 2,
+        "name": "Bella",
+        "revenue": 3000000
+      },
+      {
+        "id": 3,
+        "name": "Chandra",
+        "revenue": 0
+      },
+      {
+        "id": 4,
+        "name": "Dina",
+        "revenue": 850000
+      },
+      {
+        "id": 5,
+        "name": "Eko",
+        "revenue": 0
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "sql": "SELECT id, status FROM orders WHERE ordered_at >= '2026-01-01' AND ordered_at < '2026-02-01' ORDER BY id;",
+    "expected": [
+      {
+        "id": 1,
+        "status": "paid"
+      },
+      {
+        "id": 2,
+        "status": "paid"
+      },
+      {
+        "id": 3,
+        "status": "pending"
+      },
+      {
+        "id": 4,
+        "status": "cancelled"
+      },
+      {
+        "id": 5,
+        "status": "paid"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "sql": "WITH value_per_category AS (SELECT category_id, SUM(price * stock) AS stock_value FROM products GROUP BY category_id) SELECT category_id, stock_value, ROUND(100.0 * stock_value / NULLIF(SUM(stock_value) OVER (),0),2) AS percentage FROM value_per_category ORDER BY category_id;",
+    "expected": [
+      {
+        "category_id": 1,
+        "stock_value": 82100000,
+        "percentage": 87.02
+      },
+      {
+        "category_id": 2,
+        "stock_value": 10500000,
+        "percentage": 11.13
+      },
+      {
+        "category_id": 3,
+        "stock_value": 1750000,
+        "percentage": 1.85
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "sql": "SELECT e.name, e.salary FROM employees e WHERE e.salary > (SELECT AVG(x.salary) FROM employees x WHERE x.department_id = e.department_id) ORDER BY e.id;",
+    "expected": [
+      {
+        "name": "Ayu",
+        "salary": 12000000
+      }
+    ]
+  }
+]

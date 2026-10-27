@@ -1,0 +1,33 @@
+# Troubleshooting berdasarkan bukti
+
+Mulai dari pesan error lengkap dan komponen paling dekat: tool → DB → API → jaringan perangkat → Flutter. Jangan mengganti banyak hal sekaligus; catat satu perubahan dan hasilnya.
+
+| Gejala                                          | Periksa                                                    | Tindakan                                                                                                       |
+| ----------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| flutter command not found                       | `which flutter` / `where.exe flutter`                      | Tambahkan folder bin SDK ke User PATH, buka terminal baru; plugin IDE saja tidak memasang SDK                  |
+| Android SDK not found                           | SDK Location di Studio, `flutter doctor -v`                | `flutter config --android-sdk PATH_AKTUAL`, instal platform-tools dan command-line tools                       |
+| Android licenses unknown                        | `flutter doctor --android-licenses`                        | Pastikan cmdline-tools terpasang, gunakan JDK kompatibel, baca dan terima lisensi                              |
+| No devices found                                | AVD sudah home? `adb devices`, `flutter devices`           | Start AVD, tunggu boot, pilih id dengan -d; pada USB terima dialog debugging di ponsel                         |
+| Gradle build failed / unsupported class version | Java yang tertulis di doctor, bukan hanya java di terminal | Untuk baseline arahkan Flutter ke JDK17; versi JDK Studio baru bisa 25 sementara Gradle proyek belum mendukung |
+| SDK platform / NDK hilang                       | Baris error mencantumkan versi yang dibutuhkan             | Instal versi tersebut di SDK Manager, pastikan disk dan lisensi cukup                                          |
+| Unduhan Gradle/dependency gagal                 | Koneksi, proxy, disk, pesan repository                     | Coba kembali setelah koneksi pulih; jangan menghapus seluruh cache tanpa bukti korup                           |
+| Connection refused                              | `curl localhost:3000/ready`, proses API                    | Mulai server di port benar, cek DB readiness; localhost pada emulator adalah emulator                          |
+| MySQL access denied                             | Host, user, password, auth plugin, grant                   | Uji CLI dengan akun sama; periksa @localhost vs @127.0.0.1; reset password hanya pada server milik sendiri     |
+| Table/database does not exist                   | `SELECT DATABASE(); SHOW TABLES;`                          | Import schema/seed pada database benar; env bukan nama database lain                                           |
+| Port already in use                             | Port 3000/3306, native vs Docker                           | Hentikan proses milik sendiri yang bentrok atau ubah port + base URL dengan konsisten                          |
+| HTTP 400                                        | Body JSON, tipe number, kategori, desimal, parameter query | Lihat error.details, kirim semua field PUT; categoryId harus number di body                                    |
+| HTTP 404                                        | URL `/api/products/ID` dan id aktual                       | Periksa prefix /api dan apakah produk telah dihapus                                                            |
+| HTTP 409                                        | SKU atau foreign key order_items                           | Gunakan SKU unik; produk dengan pesanan tidak boleh dihapus pada desain ini                                    |
+| HTTP 500                                        | Log server dan /ready                                      | Periksa koneksi/schema; klien sengaja tidak menerima SQL/stack trace                                           |
+| HTTP 503 pada /ready                            | Database, kredensial, pool                                 | Tunggu MySQL sehat; bedakan liveness /health dari readiness /ready                                             |
+| API tidak bisa diakses emulator                 | Chrome emulator → `http://10.0.2.2:3000/ready`             | Android Emulator standar memakai 10.0.2.2; host firewall harus mengizinkan server                              |
+| Android fisik gagal                             | IP LAN host, Wi-Fi, firewall                               | Gunakan IP komputer atau adb reverse; 10.0.2.2 khusus emulator standar                                         |
+| Debug sukses, release gagal jaringan            | HTTPS vs HTTP, manifest merge                              | HTTP hanya diizinkan debug; gunakan API HTTPS valid pada release dan dart-define baru                          |
+| Mengubah base URL tidak berpengaruh             | Perintah flutter run                                       | Stop aplikasi lalu run ulang dengan --dart-define; hot reload tidak mengganti compile-time env                 |
+| Seed duplicate key                              | Data sudah ada                                             | Reset database latihan sesuai panduan; jangan seed ulang ke data aktif                                         |
+| Docker init SQL tidak terulang                  | Volume sudah berisi data                                   | Jalankan reset eksplisit; mengubah file init tidak otomatis memodifikasi volume lama                           |
+| Query expected berbeda                          | Apakah Flutter/API pernah mengubah seed?                   | Hentikan penulis, reset, ulangi verifikasi fixture                                                             |
+| npm engine warning                              | `node -v`                                                  | Gunakan Node24 LTS, jalankan npm ci dengan lockfile; Node23 bukan baseline                                     |
+| Error format JSON Flutter                       | Bentuk data dan field required                             | Curl API dan bandingkan kontrak; decoder menolak data rusak daripada memberi nilai palsu                       |
+
+Untuk laporan bug, sertakan OS, `flutter --version`, `flutter doctor -v` yang sudah disamarkan path pribadi bila perlu, langkah reproduksi, status HTTP, dan pesan aman dari server. Jangan sertakan .env, password, token, atau data pribadi. `flutter clean` hanya relevan untuk artefak build usang setelah perubahan konfigurasi; bukan solusi universal untuk network, SQL, atau error source.

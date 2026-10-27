@@ -1,0 +1,10 @@
+.git
+node_modules
+**/node_modules
+flutter-crud
+kotlin-logic
+mysql-masterclass
+.test-results
+*.zip
+backend/dist
+backend/package-lock.json

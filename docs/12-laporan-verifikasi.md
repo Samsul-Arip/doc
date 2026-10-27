@@ -1,0 +1,41 @@
+# Laporan verifikasi nyata
+
+Pemeriksaan dilakukan pada **28 Oktober 2026, Asia/Jakarta**, di macOS Apple Silicon. Hasil berikut berasal dari perintah yang benar-benar dijalankan pada source ini. Konfigurasi CI tersedia tetapi belum dieksekusi di GitHub karena repository belum dipublikasikan.
+
+| Bagian                 | Pemeriksaan                                                                              | Hasil                                                                                                                                                            |
+| ---------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kotlin                 | Kotlin compiler 2.1.20 + JDK17; `bash scripts/kotlin.sh test`                            | Lulus: 12 pola, 13 algoritma utama, latihan tambahan dan dasar, input batas, overflow, serta properti simetri diamond                                            |
+| Kotlin lint            | ktlint1.5.0 pada seluruh source selain DiamondMain.kt                                    | Lulus; contoh diamond utama sengaja dipertahankan sesuai materi                                                                                                  |
+| MySQL                  | Server **8.4.13**, database sementara terisolasi, port33306                              | Schema dan seed berhasil dimuat                                                                                                                                  |
+| SQL                    | `node mysql-masterclass/tests/verify.mjs` menjalankan 35 file solusi nyata               | Semua 35 hasil cocok dengan expected result                                                                                                                      |
+| SQL tambahan           | Fundamental INSERT/UPDATE/DELETE, DDL temporary, transaksi/lock, EXPLAIN/EXPLAIN ANALYZE | Semua berhasil; mutation di-rollback                                                                                                                             |
+| Reset SQL              | `mysql-masterclass/reset.sql` dari root                                                  | Berhasil membangun ulang seluruh seed                                                                                                                            |
+| Backend                | Node **24.22.1**, TypeScript build, ESLint, Prettier                                     | Lulus                                                                                                                                                            |
+| API                    | Vitest, fake HTTP + integrasi MySQL nyata                                                | **21 tes lulus**, tidak ada skipped saat MYSQL_TEST=1                                                                                                            |
+| API runtime            | Server hasil build: `/health`, `/ready`, pencarian produk                                | HTTP200; respons tanggal seed berupa UTC yang benar                                                                                                              |
+| Dependency             | `npm ci` bersih, lockfile mencakup binding native macOS/Linux/Windows; `npm audit`       | **0 kerentanan** saat pemeriksaan                                                                                                                                |
+| Flutter                | Flutter **3.29.0**, Dart **3.7.0**, JDK **17.0.17**, Android SDK35                       | Dependency berhasil diselesaikan                                                                                                                                 |
+| Flutter format/analyze | Dart format dan `flutter analyze`                                                        | Tidak ada perubahan format; **No issues found**                                                                                                                  |
+| Flutter test           | Decoder, HTTP repository, loading/empty/error/retry, form                                | **9 tes lulus**, tanpa warning tap di luar layar                                                                                                                 |
+| Android build          | `flutter build apk --debug`                                                              | Berhasil; build awal sekitar 511 detik karena persiapan Gradle/cache                                                                                             |
+| Android integration    | AVD Pixel_9, API35 ARM64, emulator-5554; API dan MySQL nyata                             | **1 integration test lulus**: create → detail → edit stok → delete → search kosong                                                                               |
+| Simulator              | Node test runner, ESLint, Prettier                                                       | **6 tes lulus**, seluruh pola n=1..10, short circuit, snapshot, print/newline                                                                                    |
+| Simulator browser      | In-app browser, viewport390 dan1280                                                      | Kontrol Step/Back/Reset/Run to End, output diamond25 bintang, mode latihan dan jawaban benar diperiksa; tidak ditemukan overflow horizontal pada viewport ponsel |
+| Dokumentasi            | Pemeriksa link Markdown lokal                                                            | Semua target lokal tersedia                                                                                                                                      |
+| Compose                | Parsing YAML + pemeriksaan konfigurasi layanan                                           | Valid secara sintaks; runtime Docker tidak tersedia                                                                                                              |
+
+Integration test membangun APK dengan entry point pengujian. Setelah tes tersebut, APK debug **dibangun ulang dari `lib/main.dart`** untuk artefak aplikasi biasa. APK development memakai API `http://10.0.2.2:3000/api`; server harus dijalankan pada komputer host sebelum aplikasi dipakai. APK bukan paket release/signing production.
+
+## Perbaikan yang diverifikasi
+
+Peringatan analyzer Flutter dan hit test tombol pada widget test diperbaiki, body JSON rusak serta batas payload ditangani, konfigurasi kutip healthcheck Compose diperbaiki, dan DATETIME MySQL dikonversi secara eksplisit menjadi UTC. Instalasi dependency backend diulang bersih untuk menghindari lockfile optional native binding yang tidak lengkap. Tes snapshot simulator mengakomodasi n=1 yang hanya punya satu event kondisi; pengujian akhir kembali lulus.
+
+## Batas verifikasi
+
+- Docker/Compose tidak dijalankan karena CLI/engine tidak tersedia; YAML yang valid bukan bukti container image berhasil dibangun. Jalur native Node + MySQL benar-benar diuji.
+- GitHub CLI dan koneksi GitHub yang dapat menulis repository tidak tersedia. Tidak ada repository public, URL Pages, atau run CI cloud yang diklaim berhasil. Workflow Pages dan instruksi publikasi manual tersedia di [panduan GitHub](09-git-github-guide.md).
+- Instalasi dari perangkat Windows11/Ubuntu baru serta perangkat Android fisik tidak diuji langsung. Dokumentasinya merujuk sumber resmi. Target iOS belum ditambahkan dan Xcode lokal belum lengkap.
+- Build release, signing distribusi, dan API produksi belum diuji. Scope proyek adalah latihan lokal; API belum memiliki login/otorisasi.
+- `npm audit` adalah snapshot waktu pemeriksaan, bukan jaminan keamanan masa depan. Jalankan ulang saat memperbarui dependency.
+
+MySQL sementara dan kredensial pengujiannya berada di luar repository. Tidak ada password nyata yang dimasukkan ke source/ZIP. `.env.example` berisi placeholder yang harus diganti pengguna. Flutter diarahkan ke JDK17 untuk kompatibilitas Gradle; path JDK lokal tidak disimpan dalam file proyek yang dilacak.

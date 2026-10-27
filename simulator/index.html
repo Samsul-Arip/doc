@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Debugger visual Kotlin: pahami loop, diamond, dan evaluasi short-circuit selangkah demi selangkah."
+    />
+    <title>Logic Lab · Kotlin Masterclass</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="engine.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="./"
+        ><span class="brand-icon">K<span>▶</span></span
+        ><span
+          >LOGIC<span class="brand-light">LAB</span
+          ><small>MOBILE DEVELOPER MASTERCLASS</small></span
+        ></a
+      ><span class="tag">KOTLIN / 01</span>
+    </header>
+    <main>
+      <section class="intro">
+        <div>
+          <span class="eyebrow">DARI RUMUS MENJADI PEMAHAMAN</span>
+          <h1>Lihat logikanya.<br /><span>Pahami setiap langkah.</span></h1>
+          <p>
+            Telusuri nested loop, uji kondisi, dan temukan bagaimana satu sel
+            menjadi sebuah pola.
+          </p>
+        </div>
+        <div class="intro-art" aria-hidden="true">
+          <pre>
+   *
+  * *
+ *   *
+*     *
+ *   *
+  * *
+   *</pre>
+          <span>i × j → pola</span>
+        </div>
+      </section>
+      <section class="toolbar" aria-label="Pengaturan simulasi">
+        <label
+          >Pola<select id="pattern">
+            <option value="diamond">Diamond</option>
+            <option value="hollow-diamond">Hollow diamond</option>
+            <option value="triangle">Segitiga</option>
+            <option value="pyramid">Piramida</option>
+          </select></label
+        ><label
+          >Ukuran n<input
+            id="n"
+            type="number"
+            min="1"
+            max="10"
+            value="4" /></label
+        ><label class="practice-toggle"
+          ><input type="checkbox" id="practice" />Mode latihan</label
+        ><button id="reveal" hidden>Lihat solusi</button
+        ><span id="config-error" role="alert"></span>
+      </section>
+      <section id="challenge" class="challenge" hidden>
+        <h2>Prediksi sebelum menjalankan</h2>
+        <p>
+          Untuk pola ini, berapa bintang yang dicetak? Hitung sel yang memenuhi
+          kondisi. Console dan kondisi disembunyikan sampai solusi dibuka.
+        </p>
+        <label
+          >Jumlah bintang<input
+            id="answer"
+            type="number"
+            min="0"
+            placeholder="Jawabanmu" /></label
+        ><button id="check-answer">Periksa jawaban</button
+        ><span id="answer-result" role="status"></span>
+      </section>
+      <div class="workspace">
+        <section class="panel source-panel">
+          <div class="panel-heading">
+            <h2><span class="dot"></span> Source Kotlin</h2>
+            <span>main.kt</span>
+          </div>
+          <div
+            id="source"
+            class="source"
+            aria-label="Source code Kotlin dengan nomor baris"
+          ></div>
+        </section>
+        <div class="right-column">
+          <section class="panel">
+            <div class="panel-heading">
+              <h2>Grid iterasi</h2>
+              <span id="grid-size"></span>
+            </div>
+            <div class="grid-scroll">
+              <div
+                id="grid"
+                class="grid"
+                role="grid"
+                aria-label="Visual baris dan kolom"
+              ></div>
+            </div>
+            <div class="legend">
+              <span><i class="swatch active"></i>Sel aktif</span
+              ><span><i class="swatch filled"></i>Bintang dicetak</span
+              ><span>i = baris · j = kolom</span>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-heading">
+              <h2>Nilai variabel</h2>
+              <span id="event-type">mulai</span>
+            </div>
+            <div id="variables" class="variables"></div>
+          </section>
+        </div>
+      </div>
+      <section class="transport" aria-label="Kontrol debugger">
+        <div class="transport-buttons">
+          <button id="reset" title="Kembali ke awal">
+            ↺ <span>Reset</span></button
+          ><button id="back">← <span>Step Back</span></button
+          ><button id="forward" class="primary">
+            Step Forward <span>→</span></button
+          ><button id="end">Run to End <span>↠</span></button>
+        </div>
+        <div class="progress-area">
+          <span id="progress-text"></span
+          ><progress id="progress" max="100" value="0"></progress>
+        </div>
+      </section>
+      <div class="bottom-grid">
+        <section class="panel">
+          <div class="panel-heading">
+            <h2>Evaluasi kondisi</h2>
+            <span>short-circuit</span>
+          </div>
+          <div id="conditions" class="conditions"></div>
+          <p id="explanation" class="explanation" aria-live="polite"></p>
+          <p class="hint">
+            — belum diperiksa · <span class="skip-text">dilewati</span> berarti
+            tidak dieksekusi. Print dan println punya langkah tersendiri.
+          </p>
+        </section>
+        <section class="panel console-panel">
+          <div class="panel-heading">
+            <h2>Console output</h2>
+            <span>stdout</span>
+          </div>
+          <pre id="console" aria-label="Keluaran program"></pre>
+          <p class="console-caption">
+            Spasi dan baris baru ditampilkan persis seperti print() dan
+            println().
+          </p>
+        </section>
+      </div>
+      <details class="learn">
+        <summary>Mengapa rumus diamond seperti ini?</summary>
+        <p>
+          Bagian atas mempunyai pusat j=n. Pada baris i, tepi bergerak sejauh
+          i−1, sehingga batasnya n−i+1 hingga n+i−1. Setelah tengah, langkah
+          turun k=i−n membuat kiri menjadi 1+k=i−n+1 dan kanan menjadi
+          (2n−1)−k=3n−i−1. Gabungkan wilayah atas dan bawah dengan OR; semua
+          batas di masing-masing wilayah harus benar dengan AND.
+        </p>
+        <p>
+          Mesin mengevaluasi operand dari kiri ke kanan. Pada AND, false
+          menghentikan grup. Pada OR, true menghentikan grup. Highlight tidak
+          berpindah ke operand yang dilewati. Ini visualisasi semantik source
+          yang ditampilkan, bukan runtime/compiler Kotlin atau editor kode
+          bebas.
+        </p>
+      </details>
+      <footer>
+        <span>Belajar pelan. Pahami dalam.</span
+        ><span>Kotlin · MySQL · Flutter</span>
+      </footer>
+    </main>
+  </body>
+</html>
